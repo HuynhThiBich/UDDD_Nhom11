@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:myshop1/ui/cart/cart_manager.dart';
-import 'package:provider/provider.dart';
 
 import '../../models/cart_item.dart';
 import '../shared/dialog_utils.dart';
+import 'package:provider/provider.dart';
 
 class CartItemCard extends StatelessWidget {
   final String productId;
-  final  CartItem cartItem;
+  final CartItem cardItem;
 
-  const CartItemCard ({
+  const CartItemCard({
     required this.productId,
-    required this.cartItem,
+    required this.cardItem,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(cartItem.id),
+      key: ValueKey(cardItem.id),
       background: Container(
         color: Theme.of(context).errorColor,
         alignment: Alignment.centerRight,
@@ -37,18 +37,16 @@ class CartItemCard extends StatelessWidget {
       confirmDismiss: (direction) {
         return showConfirmDialog(
           context,
-          'Do you want to remove the item from the cart?'
+          'Do you want to remove the item from the cart?',
         );
       },
       onDismissed: (direction) {
-       // print('Cart item dismissed');
-      context.read<CartManager>().removeItem(productId);
+        context.read<CartManager>().removeItem(productId);
       },
-      child: buildItemCart(),
+      child: buildItemCard(),
     );
   }
-
-  Widget buildItemCart() {
+  Widget buildItemCard() {
     return Card(
       margin: const EdgeInsets.symmetric(
         horizontal: 15,
@@ -61,13 +59,13 @@ class CartItemCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: FittedBox(
-                child: Text('\$${cartItem.price}'),
+                child: Text('\$${cardItem.price}'),
               ),
             ),
           ),
-          title: Text(cartItem.title),
-          subtitle: Text('Total: \$${(cartItem.price * cartItem.quantity)}'),
-          trailing: Text('${cartItem.quantity} x'),
+          title: Text(cardItem.title),
+          subtitle: Text('Total: \$${cardItem.price * cardItem.quantity}'),
+          trailing: Text('${cardItem.quantity} x'),
         ),
       ),
     );

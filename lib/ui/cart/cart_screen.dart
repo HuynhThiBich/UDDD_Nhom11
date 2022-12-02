@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myshop1/ui/screens.dart';
-import 'package:provider/provider.dart';
 
+import '../orders/order_manager.dart';
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -19,7 +19,7 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          buildCartSumary(cart, context),
+          buildCartSummary(cart, context),
           const SizedBox(height: 10),
           Expanded(
             child: buildCartDetails(cart),
@@ -35,14 +35,14 @@ class CartScreen extends StatelessWidget {
           .map(
             (entry) => CartItemCard(
               productId: entry.key,
-              cartItem: entry.value,
+              cardItem: entry.value,
             ),
           )
           .toList(),
     );
   }
 
-  Widget buildCartSumary(CartManager cart, BuildContext context) {
+  Widget buildCartSummary(CartManager cart, BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(15),
       child: Padding(
@@ -65,27 +65,19 @@ class CartScreen extends StatelessWidget {
               backgroundColor: Theme.of(context).primaryColor,
             ),
             TextButton(
-              /* onPressed: () {
-                print('An order has been added');
+              onPressed: cart.totalAmount <= 0
+              ? null
+              : () {
+                  context.read<OrdersManager>().addOrder(
+                      cart.products,
+                      cart.totalAmount,
+                  );
+                  cart.clear();
               },
               style: TextButton.styleFrom(
                 textStyle: TextStyle(color: Theme.of(context).primaryColor),
               ),
-              child: const Text('ORDER NOW'), */
-                onPressed: cart.totalAmount <= 0
-                ? null
-                : () {
-                  context.read<OrdersManager>().addOrder(
-                    cart.products,
-                    cart.totalAmount,
-                  );
-                  cart.clear();
-                },
-                style: TextButton.styleFrom(
-                  textStyle: 
-                  TextStyle(color: Theme.of(context).primaryColor),
-                ),
-                child: const Text('ORDER NOW'),
+              child: const Text('ORDER NOW'),
             )
           ],
         ),
