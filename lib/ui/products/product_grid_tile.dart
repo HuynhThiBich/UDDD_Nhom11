@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myshop1/ui/cart/cart_manager.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import 'product_detail_screen.dart';
 
@@ -19,7 +21,7 @@ class ProductGridTile extends StatelessWidget {
         child: GestureDetector(
             onTap: () {
                 Navigator.of(context).pushNamed(
-                  ProductetaDetaiScreen.routeName,
+                  ProductDetailScreen.routeName,
                   arguments: product.id,
                 );
               },
@@ -27,7 +29,7 @@ class ProductGridTile extends StatelessWidget {
           onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (ctx) => ProductetaDetaiScreen(product),
+                    builder: (ctx) => ProductDetailScreen(product),
                   ),
               );
           },
@@ -52,12 +54,42 @@ class ProductGridTile extends StatelessWidget {
               isFavorite ? Icons.favorite : Icons.favorite_border,
             ),
             color: Theme.of(context).colorScheme.secondary,
-             onPressed: () {
+            onPressed: () {
               product.isFavorite = !isFavorite;
-             },
+            },
           );
         },
       ),
+      title: Text(
+        product.title,
+        textAlign: TextAlign.center,
+      ),
+      trailing: IconButton(
+        icon: const Icon(
+          Icons.shopping_cart,
+        ),
+        onPressed: () {
+          final cart = context.read<CartManager>();
+          cart.addItem(product);
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: const Text(
+                  'Item added to cart',
+                ),
+                duration: const Duration(seconds: 2),
+                action: SnackBarAction(
+                  label: 'UNDO',
+                  onPressed: () {
+                    cart.removeSingleItem(product.id!);
+                  },
+                ),
+              ),
+            );
+        },
+        color: Theme.of(context).colorScheme.secondary,
+      ),
     );
-  }  
+  }
 }
