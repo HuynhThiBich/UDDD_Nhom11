@@ -41,12 +41,12 @@ class UserProductListTile extends StatelessWidget {
           ..showSnackBar(
             const SnackBar(
               content: Text(
-                'Product deleted',
+                'deleted food',
                 textAlign: TextAlign.center,
               ),
             ),
           );
-        print('Go to edit product screen');
+        print('Go to edit food screen');
       },
       color: Theme.of(context).primaryColor,
     );
